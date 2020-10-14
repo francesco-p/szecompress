@@ -254,7 +254,7 @@ def indeg_guided(self):
         if c0_indices.size > self.k:
             self.classes[c0_indices[:self.k]] = np.array(range(1, self.k+1))*-1
         else:
-            print('[ refinement ] Invalid cardinality of C_0')
+            # print('[ refinement ] Invalid cardinality of C_0')
             return False
 
     self.classes *= -1
