@@ -60,7 +60,8 @@ class Codec:
         :param refinement: string refinement to be used
         :return: k, epsilon, classes, sze_idx, regularity list, number of irregular pairs
         """
-        print(f"[CoDec] Compression...")
+        if self.verbose:
+            print(f"[CoDec] Compression...")
         partitions = {}
         for epsilon in self.epsilons:
             regular, k, classes, sze_idx, reg_list , nirr= self.run_alg(G, epsilon, refinement)
@@ -81,7 +82,8 @@ class Codec:
                 break
 
         if partitions == {}:
-            print(f"[CoDec] NO regular partitions found.")
+            if self.verbose:
+                print(f"[CoDec] NO regular partitions found.")
         else:
 
             max_idx = -1
@@ -98,7 +100,8 @@ class Codec:
             sze_idx = partitions[k][2]
             reg_list = partitions[k][3]
             nirr = partitions[k][4]
-            print(f"[CoDec] Best partition - k:{k} epsilon:{epsilon:.4f} sze_idx:{sze_idx:.4f} irr_pairs:{nirr}")
+            if self.verbose:
+                print(f"[CoDec] Best partition - k:{k} epsilon:{epsilon:.4f} sze_idx:{sze_idx:.4f} irr_pairs:{nirr}")
 
         return k, epsilon, classes, sze_idx, reg_list, nirr
 
@@ -113,7 +116,8 @@ class Codec:
         [TODO BUG] wrong implementation on weighted case indensity preservation
 
         """
-        print("[CoDec] Decompression --> SZE")
+        if self.verbose:
+            print("[CoDec] Decompression --> SZE")
         n = G.shape[0]
         reconstructed_mat = np.zeros((n, n), dtype='float32')
         for r in range(2, k + 1):
@@ -165,7 +169,8 @@ class Codec:
         :param ksize: int size of kernel
         :return: np.array((n, n)) filtered decompressed matrix
         """
-        print("[CoDec] Post-Decompression Filtering SZE --> FSZE")
+        if self.verbose:
+            print("[CoDec] Post-Decompression Filtering SZE --> FSZE")
         fsze = ndimage.median_filter(sze,ksize)
         fsze = np.tril(fsze, -1)
         return fsze + fsze.T 
